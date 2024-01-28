@@ -1,5 +1,6 @@
 import { writeFileSync } from 'fs';
 import { VOICES } from '../constants';
+import { niceHandler } from '../handlers/nice/niceHandler';
 import { ttsStreamElementsHandler } from '../handlers/streamelements/ttsStreamElementsHandler';
 import { ttsTikTokHandler } from '../handlers/tiktok/ttsTikTokHandler';
 import { playSound } from '../playSound';
@@ -101,7 +102,24 @@ export const tts: BotCommand = {
   callback: async (_, parsedCommand) => {
     const params = parsedCommand.parsedMessage.command?.botCommandParams;
     if (params) {
-      await runTTS(params);
+      const buffer = await niceHandler(params);
+
+      if (!buffer) {
+        return;
+      }
+
+      // For some reason (probably an API error), the buffer was empty,
+      // so we don't need to write it to a file
+      if (buffer.byteLength === 0) {
+        return;
+      }
+
+      // Generate a random id for the file name
+      const id = Math.random().toString(36).substring(2, 15);
+      // Write the buffer to a file
+      writeFileSync(`../tts/${id}.mp3`, new Uint8Array(buffer));
+      // Play the file
+      await playSound(`../tts/${id}.mp3`);
     }
   },
 };
