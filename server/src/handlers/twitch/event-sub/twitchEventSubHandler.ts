@@ -45,6 +45,18 @@ export async function twitchEventSubHandler(data: EventsubEvent) {
       break;
     }
 
+    case 'channel.subscription.message': {
+      const connection = getConnection();
+      if (connection) {
+        if (data.duration_months > 1 && data.streak_months > 1) {
+          sendChatMessage(connection, `Thank you for subscribing ${data.user_name} AGAIN?! I don't deserve this but thank you so much.`);
+        } else {
+          sendChatMessage(connection, `Thank you for subscribing ${data.user_name}, you sure do know a good time when you find one.`);
+        }
+      }
+      break;
+    }
+
     case 'channel.raid': {
       const connection = getConnection();
       if (connection) {
