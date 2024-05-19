@@ -17,6 +17,7 @@ import { lutf1sk } from './commands/lutf1sk';
 import { play } from './commands/play';
 import { point } from './commands/point';
 import { pointladder } from './commands/pointladder';
+import { points } from './commands/points';
 import { queuesong } from './commands/queuesong';
 import { quote } from './commands/quote';
 import { removealias } from './commands/removealias';
@@ -108,6 +109,7 @@ const builtInCommands: BotCommand[] = [
   lutf1sk,
   play,
   point,
+  points,
   pointladder,
   quote,
   removealias,
