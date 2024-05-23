@@ -14,7 +14,14 @@ export const welcome: BotCommand = {
       const nick = parsedCommand.parsedMessage.source?.nick;
       const displayName = parsedCommand.parsedMessage.tags?.['display-name'];
       const welcomeMessage = parsedCommand.parsedMessage.command?.botCommandParams;
-      if (userId && nick && displayName && welcomeMessage && !welcomeMessage.startsWith('!') && !welcomeMessage.startsWith('/')) {
+      if (
+        userId &&
+        nick &&
+        displayName &&
+        welcomeMessage &&
+        (!welcomeMessage.startsWith('!') || welcomeMessage.startsWith('!tts')) &&
+        !welcomeMessage.startsWith('/')
+      ) {
         const user = findOrCreateUserById(userId, nick, displayName);
         user.welcomeMessage = welcomeMessage;
         Users.saveOne(user);

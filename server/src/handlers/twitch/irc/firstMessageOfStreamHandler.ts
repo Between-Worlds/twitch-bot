@@ -1,12 +1,13 @@
 import type websocket from 'websocket';
 import { findOrCreateUserById } from '../../../commands/helpers/findOrCreateUser';
 import { sendChatMessage } from '../../../commands/helpers/sendChatMessage';
+import { playTTS } from '../../../commands/tts';
 import Config from '../../../config';
 import { Users } from '../../../storage-models/user-model';
 import { StreamState } from '../../../streamState';
 import type { ParsedMessage } from '../../../types';
 
-export function firstMessageOfStreamHandler(connection: websocket.connection, parsedMessage: ParsedMessage): void {
+export async function firstMessageOfStreamHandler(connection: websocket.connection, parsedMessage: ParsedMessage): Promise<void> {
   // If the feature is disabled, then we don't handle this event
   if (!Config.features.first_message_of_stream_handler) {
     return;
@@ -28,6 +29,12 @@ export function firstMessageOfStreamHandler(connection: websocket.connection, pa
       user.lastSeen = new Date().toISOString();
       Users.saveOne(user);
       if (user.welcomeMessage) {
+        if (user.welcomeMessage.startsWith('!tts')) {
+          const message = user.welcomeMessage.substring(5);
+          await playTTS(message);
+          return;
+        }
+
         if (user.welcomeMessage.startsWith('!') || user.welcomeMessage.startsWith('/')) {
           return;
         }

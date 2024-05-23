@@ -70,7 +70,7 @@ export function runTwitchIRCWebsocket() {
                 subHandler(connection, parsedMessage).catch((e) => logger.error(e));
                 bitHandler(connection, parsedMessage).catch((e) => logger.error(e));
                 firstMessageHandler(connection, parsedMessage);
-                firstMessageOfStreamHandler(connection, parsedMessage);
+                firstMessageOfStreamHandler(connection, parsedMessage).catch((e) => logger.error(e));
                 returningChatterHandler(connection, parsedMessage);
 
                 if (parsedMessage.source?.nick && parsedMessage.parameters) {

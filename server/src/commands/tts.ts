@@ -95,6 +95,27 @@ export const runTTS = async (
   await playSound(`../tts/${id}.mp3`);
 };
 
+export async function playTTS(message: string) {
+  const buffer = await niceHandler(message);
+
+  if (!buffer) {
+    return;
+  }
+
+  // For some reason (probably an API error), the buffer was empty,
+  // so we don't need to write it to a file
+  if (buffer.byteLength === 0) {
+    return;
+  }
+
+  // Generate a random id for the file name
+  const id = Math.random().toString(36).substring(2, 15);
+  // Write the buffer to a file
+  writeFileSync(`../tts/${id}.mp3`, new Uint8Array(buffer));
+  // Play the file
+  await playSound(`../tts/${id}.mp3`);
+}
+
 export const tts: BotCommand = {
   command: 'tts',
   id: 'tts',
@@ -102,24 +123,7 @@ export const tts: BotCommand = {
   callback: async (_, parsedCommand) => {
     const params = parsedCommand.parsedMessage.command?.botCommandParams;
     if (params) {
-      const buffer = await niceHandler(params);
-
-      if (!buffer) {
-        return;
-      }
-
-      // For some reason (probably an API error), the buffer was empty,
-      // so we don't need to write it to a file
-      if (buffer.byteLength === 0) {
-        return;
-      }
-
-      // Generate a random id for the file name
-      const id = Math.random().toString(36).substring(2, 15);
-      // Write the buffer to a file
-      writeFileSync(`../tts/${id}.mp3`, new Uint8Array(buffer));
-      // Play the file
-      await playSound(`../tts/${id}.mp3`);
+      await playTTS(params);
     }
   },
 };
