@@ -3,6 +3,7 @@ import { addcommand } from './commands/addcommand';
 import { addpushup } from './commands/addpushup';
 import { addsquat } from './commands/addsquat';
 import { commands } from './commands/commands';
+import { coolestviewer } from './commands/coolestviewer';
 import { delvoid } from './commands/delvoid';
 import { fetchcurrentsong } from './commands/fetchcurrentsong';
 import { followage } from './commands/followage';
@@ -101,6 +102,7 @@ const builtInCommands: BotCommand[] = [
   addpushup,
   addsquat,
   commands,
+  coolestviewer,
   delvoid,
   followage,
   forodor,
@@ -109,8 +111,8 @@ const builtInCommands: BotCommand[] = [
   lutf1sk,
   play,
   point,
-  points,
   pointladder,
+  points,
   quote,
   removealias,
   removecommand,
