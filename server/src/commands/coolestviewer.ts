@@ -1,5 +1,8 @@
 import { getOBSWebSocketConnection } from '../handlers/obs/obsWebsocket';
+import { fetchUserChatColor } from '../handlers/twitch/helix/fetchUserChatColor';
+import { logger } from '../logger';
 import type { BotCommand } from '../types';
+import { hexToABGRNumeric } from '../utils/hexToABGRNumeric';
 import { hasBotCommandParams } from './helpers/hasBotCommandParams';
 import { sendChatMessage } from './helpers/sendChatMessage';
 
@@ -9,7 +12,7 @@ export const coolestviewer: BotCommand = {
   privileged: true,
   hidden: true,
   description: '',
-  callback: (connection, parsedCommand) => {
+  callback: async (connection, parsedCommand) => {
     if (hasBotCommandParams(parsedCommand.parsedMessage)) {
       const obsWebSocket = getOBSWebSocketConnection();
 
@@ -17,7 +20,29 @@ export const coolestviewer: BotCommand = {
         return;
       }
 
-      const username = parsedCommand.parsedMessage.command.botCommandParams;
+      const splitParams = parsedCommand.parsedMessage.command.botCommandParams.split(',');
+      const userId = splitParams[0];
+      if (!userId) {
+        logger.error('coolestviewer: userId is missing');
+        return;
+      }
+
+      const username = splitParams[1];
+      if (!username) {
+        logger.error(`coolestviewer: username is missing for user with ID ${userId}`);
+        return;
+      }
+
+      let colorToUse = '#FFFFFF';
+      const userChatColor = await fetchUserChatColor(userId);
+      if (userChatColor === null) {
+        return;
+      } else if (userChatColor.color === '') {
+        logger.debug(`coolestviewer: userChatColor.color for user ${username} is empty`);
+      } else {
+        colorToUse = userChatColor.color;
+        logger.debug(`coolestviewer: userChatColor.color for user ${username} is ${colorToUse}`);
+      }
 
       obsWebSocket.send(
         JSON.stringify({
@@ -41,6 +66,7 @@ export const coolestviewer: BotCommand = {
             requestData: {
               inputName: 'Coolest Viewer',
               inputSettings: {
+                color: hexToABGRNumeric(colorToUse),
                 text: `Coolest Viewer: ${username}`,
               },
             },
