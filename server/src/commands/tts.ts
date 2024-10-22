@@ -1,6 +1,6 @@
 import { writeFileSync } from 'fs';
 import { VOICES } from '../constants';
-import { niceHandler } from '../handlers/nice/niceHandler';
+import { niceTTSHandler } from '../handlers/nice/niceTTSHandler';
 import { ttsStreamElementsHandler } from '../handlers/streamelements/ttsStreamElementsHandler';
 import { ttsTikTokHandler } from '../handlers/tiktok/ttsTikTokHandler';
 import { playSound } from '../playSound';
@@ -96,7 +96,7 @@ export const runTTS = async (
 };
 
 export async function playTTS(message: string) {
-  const buffer = await niceHandler(message);
+  const buffer = await niceTTSHandler(message);
 
   if (!buffer) {
     return;

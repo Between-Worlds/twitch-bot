@@ -2,6 +2,7 @@ import { addburpee } from './commands/addburpee';
 import { addcommand } from './commands/addcommand';
 import { addpushup } from './commands/addpushup';
 import { addsquat } from './commands/addsquat';
+import { beat } from './commands/beat';
 import { commands } from './commands/commands';
 import { coolestviewer } from './commands/coolestviewer';
 import { delvoid } from './commands/delvoid';
@@ -102,6 +103,7 @@ const builtInCommands: BotCommand[] = [
   addcommand,
   addpushup,
   addsquat,
+  beat,
   commands,
   coolestviewer,
   delvoid,

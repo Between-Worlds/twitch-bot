@@ -2,7 +2,7 @@ import fetch from 'node-fetch';
 import Config from '../../config';
 import { logger } from '../../logger';
 
-export const niceHandler = async (text: string): Promise<ArrayBuffer | null> => {
+export const niceTTSHandler = async (text: string): Promise<ArrayBuffer | null> => {
   if (Config.tiktok.session_id) {
     try {
       const url = `https://nice.gg/tts?tiktok_session_id=${Config.tiktok.session_id}&msg=${encodeURI(text)}`;
