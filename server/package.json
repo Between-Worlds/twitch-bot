@@ -35,6 +35,7 @@
     "play-sound": "^1.1.6",
     "socket.io": "^4.8.0",
     "websocket": "^1.0.34",
+    "youtube-dl-exec": "^3.0.10",
     "zod": "^3.22.4"
   },
   "devDependencies": {
