@@ -7,6 +7,7 @@ import { commands } from './commands/commands';
 import { coolestviewer } from './commands/coolestviewer';
 import { delvoid } from './commands/delvoid';
 import { fetchcurrentsong } from './commands/fetchcurrentsong';
+import { flipdropgame } from './commands/flipdropgame';
 import { followage } from './commands/followage';
 import { forodor } from './commands/forodor';
 import { get } from './commands/get';
@@ -107,6 +108,7 @@ const builtInCommands: BotCommand[] = [
   commands,
   coolestviewer,
   delvoid,
+  flipdropgame,
   followage,
   forodor,
   get,
