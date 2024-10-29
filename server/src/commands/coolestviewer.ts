@@ -1,4 +1,4 @@
-import { getOBSWebSocketConnection } from '../handlers/obs/obsWebsocket';
+import { getOBSWebSocketConnection, sendRequest } from '../handlers/obs/obsWebsocket';
 import { fetchUserChatColor } from '../handlers/twitch/helix/fetchUserChatColor';
 import { logger } from '../logger';
 import type { BotCommand } from '../types';
@@ -44,50 +44,35 @@ export const coolestviewer: BotCommand = {
         logger.debug(`coolestviewer: userChatColor.color for user ${username} is ${colorToUse}`);
       }
 
-      obsWebSocket.send(
-        JSON.stringify({
-          op: 6,
-          d: {
-            requestType: 'GetInputSettings',
-            requestId: 'get-input-settings',
-            requestData: {
-              inputName: 'Coolest Viewer',
-            },
-          },
-        }),
-      );
+      await sendRequest({
+        requestType: 'GetInputSettings',
+        requestId: 'get-input-settings',
+        requestData: {
+          inputName: 'Coolest Viewer',
+        },
+      });
 
-      obsWebSocket.send(
-        JSON.stringify({
-          op: 6,
-          d: {
-            requestType: 'SetInputSettings',
-            requestId: 'set-coolest-viewer-name',
-            requestData: {
-              inputName: 'Coolest Viewer',
-              inputSettings: {
-                color: hexToABGRNumeric(colorToUse),
-                text: `Coolest Viewer: ${username}`,
-              },
-            },
+      await sendRequest({
+        requestType: 'SetInputSettings',
+        requestId: 'set-coolest-viewer-name',
+        requestData: {
+          inputName: 'Coolest Viewer',
+          inputSettings: {
+            color: hexToABGRNumeric(colorToUse),
+            text: `Coolest Viewer: ${username}`,
           },
-        }),
-      );
+        },
+      });
 
-      obsWebSocket.send(
-        JSON.stringify({
-          op: 6,
-          d: {
-            requestType: 'SetSceneItemEnabled',
-            requestId: 'set-coolest-viewer-enabled',
-            requestData: {
-              sceneName: 'Live Scene',
-              sceneItemId: 31,
-              sceneItemEnabled: true,
-            },
-          },
-        }),
-      );
+      await sendRequest({
+        requestType: 'SetSceneItemEnabled',
+        requestId: 'set-coolest-viewer-enabled',
+        requestData: {
+          sceneName: 'Live Scene',
+          sceneItemId: 31,
+          sceneItemEnabled: true,
+        },
+      });
 
       sendChatMessage(connection, `${username} is today's coolest viewer`);
     }
