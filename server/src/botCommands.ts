@@ -5,6 +5,7 @@ import { addsquat } from './commands/addsquat';
 import { beat } from './commands/beat';
 import { commands } from './commands/commands';
 import { coolestviewer } from './commands/coolestviewer';
+import { define } from './commands/define';
 import { delvoid } from './commands/delvoid';
 import { fetchcurrentsong } from './commands/fetchcurrentsong';
 import { flipdropgame } from './commands/flipdropgame';
@@ -107,6 +108,7 @@ const builtInCommands: BotCommand[] = [
   beat,
   commands,
   coolestviewer,
+  define,
   delvoid,
   flipdropgame,
   followage,
